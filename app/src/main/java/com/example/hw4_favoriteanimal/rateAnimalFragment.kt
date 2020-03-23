@@ -1,6 +1,7 @@
 package com.example.hw4_favoriteanimal
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
@@ -18,21 +19,6 @@ import kotlinx.android.synthetic.main.animal_windows_fragment.view.*
 import kotlinx.android.synthetic.main.fragment_rate_animal.*
 import kotlinx.android.synthetic.main.fragment_rate_animal.view.*
 
-
-/**
- * A simple [Fragment] subclass.
-
-class rateAnimalFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rate_animal, container, false)
-    }
-
-} */
 
 /**
  * A simple [Fragment] subclass.
@@ -87,6 +73,15 @@ class rateAnimalFragment: Fragment() {
         view.saveButton.setOnClickListener {
             Toast.makeText(activity, "Rating: ${ratingBar.rating}", Toast.LENGTH_SHORT).show()
             viewModel.ratingValue.value = ratingBar.rating.toDouble()
+
+            // Create a SharedPreferences instance for edit
+            val sharedPreferences = activity!!.getSharedPreferences("ratings",MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+
+            // save and apply changes
+            editor.putString(ANIMAL_NAME_LIST[position], ratingBar.rating.toString())
+            editor.apply()
+
 
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
                 // We are in portrait orientation

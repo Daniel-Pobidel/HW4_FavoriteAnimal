@@ -20,29 +20,34 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.animal_windows_fragment.*
 import kotlinx.android.synthetic.main.animal_windows_fragment.view.*
 import java.util.zip.Inflater
+import kotlin.math.log
 
 
 class animalWindowsFragment : Fragment() {
 
-    private val TAG = "MainActivity"
-    private val FILE_NAME = "ratingsList"
-    //private val ratingsList = ArrayList<String>()
-    //lateinit var myAdapter: ArrayAdapter<String>
-    private val MY_KEY = "ratingsList"
-
+    private val FILE_NAME = "ratings"
 
     private lateinit var viewModel: AnimalWindowsViewModel
-    var animalRatings = mutableListOf(0.0,0.0,0.0,0.0)
+    var animalRatings = mutableListOf(0.0, 0.0, 0.0, 0.0)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view= inflater.inflate(R.layout.animal_windows_fragment, container, false)
-        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(AnimalWindowsViewModel::class.java)
+        val view = inflater.inflate(R.layout.animal_windows_fragment, container, false)
+        viewModel =
+            ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(
+                AnimalWindowsViewModel::class.java
+            )
 
+        // Create an instance of getSharedPreferences for retrieve the data
+        val sharedPreferences = activity!!.getSharedPreferences(FILE_NAME, MODE_PRIVATE)
+        // Retrieve data using the key, default value is empty string in case no saved data in there
+        animalRatings[0] = sharedPreferences?.getString("Dog", "")!!.toDouble()
+        animalRatings[1] = sharedPreferences?.getString("Cat", "")!!.toDouble()
+        animalRatings[2] = sharedPreferences?.getString("Bear", "")!!.toDouble()
+        animalRatings[3] = sharedPreferences?.getString("Rabbit", "")!!.toDouble()
 
-        var index = 0 //default
 
         view.dogButton.setOnClickListener {
             viewModel.animalIndex.value = 0
@@ -58,27 +63,11 @@ class animalWindowsFragment : Fragment() {
             viewModel.animalIndex.value = 2
             changeOrientation()
         }
+
         view.rabbitButton.setOnClickListener {
             viewModel.animalIndex.value = 3
             changeOrientation()
         }
-
-        var rating = 0.0 //default
-
-
-        viewModel.ratingValue.observe(requireActivity(), Observer {
-            rating = it
-        })
-
-        viewModel.animalIndex.observe(requireActivity(), Observer {
-           index = it
-        })
-
-
-        load()
-        animalRatings[index] = rating
-
-        save()
 
         view.dogRating.text = ("Rating: ${animalRatings[0]}")
         view.catRating.text = ("Rating: ${animalRatings[1]}")
@@ -89,78 +78,22 @@ class animalWindowsFragment : Fragment() {
     }
 
 
-
-    fun changeOrientation()
-    {
-        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+    fun changeOrientation() {
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             // We are in portrait orientation
             // Load rate fragment
             activity!!.supportFragmentManager.beginTransaction()
                 .replace(R.id.main_container, rateAnimalFragment())
                 .addToBackStack(null)
                 .commit()
-        }
-        else{
+        } else {
             // We are in landscape orientation
             // replace the current rate fragment
             activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.rate_container,rateAnimalFragment())
+                .replace(R.id.rate_container, rateAnimalFragment())
                 .addToBackStack(null)
                 .commit()
         }
     }
 
-
-    fun save() {
-        // Create an instance of getSharedPreferences for edit
-        val sharedPreferences = context?.getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        val editor = sharedPreferences?.edit()
-
-        // Create an instance of Gson
-        val gson = Gson()
-
-        // toJson() method serializes the specified object into its equivalent Json representation.
-        val ratingsListJson = gson.toJson(animalRatings)
-
-        // Put the  Json representation, which is a string, into sharedPreferences
-        editor?.putString(MY_KEY, ratingsListJson)
-
-        editor?.apply() // Apply the changes
-
-    }
-
-    fun load() {
-        // Create an instance of getSharedPreferences for retrieve the data
-        val sharedPreferences = activity?.getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        // Retrieve data using the key, default value is empty string in case no saved data in there
-        val tasks = sharedPreferences?.getString(MY_KEY, "") ?: ""
-
-        if (tasks.isNotEmpty()) {
-            val gson = Gson()
-            // create an object expression that descends from TypeToken
-            // and then get the Java Type from that
-            val sType = object : TypeToken<List<Double>>() {}.type
-            val savedTaskList = gson.fromJson<List<Double>>(tasks, sType)
-
-            Log.d(TAG, savedTaskList.toString())
-            animalRatings.addAll(savedTaskList)
-
-        }
-    }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
