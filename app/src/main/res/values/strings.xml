@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">HW4_FavoriteAnimal</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rate_your_favorite_animal">Rate Your Favorite Animal</string>
+    <string name="press_on_the_images_below_to_rate_your_favorite_animal">Press on the images below to rate your favorite animal</string>
+    <string name="dog">dog</string>
+    <string name="textview">TextView</string>
+    <string name="what_is_your_rating">What is your rating?</string>
+    <string name="cat">Cat</string>
+    <string name="save">Save</string>
+    <string name="your_rating">Your rating:</string>
+</resources>
