@@ -18,13 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         // Load the List fragment
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, animalWindowsFragment())
             .addToBackStack(null)
             .commit()
-
 
         // If we are in landscape orientation, Load the rate fragment into the rate_container
         // so that both fragments are shown side by side
@@ -34,9 +32,6 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
-        Log.d("MainActivity", "main activity in oncreate ")
-
-
     }
 
 

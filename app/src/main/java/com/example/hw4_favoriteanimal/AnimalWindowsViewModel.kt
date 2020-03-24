@@ -7,5 +7,4 @@ class AnimalWindowsViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 
     val animalIndex = MutableLiveData<Int>()
-    val ratingValue = MutableLiveData<Double>()
 }

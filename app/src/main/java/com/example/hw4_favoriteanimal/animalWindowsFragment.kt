@@ -22,13 +22,11 @@ import kotlinx.android.synthetic.main.animal_windows_fragment.view.*
 import java.util.zip.Inflater
 import kotlin.math.log
 
-
 class animalWindowsFragment : Fragment() {
 
     private val FILE_NAME = "ratings"
 
     private lateinit var viewModel: AnimalWindowsViewModel
-    var animalRatings = mutableListOf(0.0, 0.0, 0.0, 0.0)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +40,6 @@ class animalWindowsFragment : Fragment() {
 
         // Create an instance of getSharedPreferences for retrieve the data
         val sharedPreferences = activity!!.getSharedPreferences(FILE_NAME, MODE_PRIVATE)
-        // Retrieve data using the key, default value is empty string in case no saved data in there
-        animalRatings[0] = sharedPreferences?.getString("Dog", "")!!.toDouble()
-        animalRatings[1] = sharedPreferences?.getString("Cat", "")!!.toDouble()
-        animalRatings[2] = sharedPreferences?.getString("Bear", "")!!.toDouble()
-        animalRatings[3] = sharedPreferences?.getString("Rabbit", "")!!.toDouble()
-
 
         view.dogButton.setOnClickListener {
             viewModel.animalIndex.value = 0
@@ -69,10 +61,12 @@ class animalWindowsFragment : Fragment() {
             changeOrientation()
         }
 
-        view.dogRating.text = ("Rating: ${animalRatings[0]}")
-        view.catRating.text = ("Rating: ${animalRatings[1]}")
-        view.bearRating.text = ("Rating: ${animalRatings[2]}")
-        view.rabbitRating.text = ("Rating: ${animalRatings[3]}")
+        // Retrieve data using the key, default value is empty string in case no saved data in there
+        // update the ratings text under each animals image
+        view.dogRating.text = ("Rating: ${sharedPreferences?.getString("Dog", "")}")
+        view.catRating.text = ("Rating: ${sharedPreferences?.getString("Cat", "")}")
+        view.bearRating.text = ("Rating: ${sharedPreferences?.getString("Bear", "")}")
+        view.rabbitRating.text = ("Rating: ${sharedPreferences?.getString("Rabbit", "")}")
 
         return view
     }

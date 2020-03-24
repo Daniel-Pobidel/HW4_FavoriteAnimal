@@ -29,7 +29,6 @@ class rateAnimalFragment: Fragment() {
 
     private val ANIMAL_NAME_LIST = listOf("Dog", "Cat", "Bear", "Rabbit")
 
-
     // Create an instance of our ViewModel
     lateinit var viewModel: AnimalWindowsViewModel
 
@@ -41,11 +40,6 @@ class rateAnimalFragment: Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_rate_animal, container, false)
 
-
-        //ViewModelProvider returns an existing ViewModel if one exists,
-        // or it creates a new one if it does not already exist.
-        // Get an instance of our ViewModel by passing context and AnimalWindowsViewModel class,
-        // then put the value (position) in liveData
         viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(AnimalWindowsViewModel::class.java)
 
         var position = 0 // default value to select the first index if no position
@@ -66,13 +60,11 @@ class rateAnimalFragment: Fragment() {
             2 -> R.drawable.bear
             else -> R.drawable.rabbit
         }
-
         view.animalImage.setImageResource(imageId)
 
 
-        view.saveButton.setOnClickListener {
+        view.saveButton.setOnClickListener{
             Toast.makeText(activity, "Rating: ${ratingBar.rating}", Toast.LENGTH_SHORT).show()
-            viewModel.ratingValue.value = ratingBar.rating.toDouble()
 
             // Create a SharedPreferences instance for edit
             val sharedPreferences = activity!!.getSharedPreferences("ratings",MODE_PRIVATE)
@@ -83,26 +75,26 @@ class rateAnimalFragment: Fragment() {
             editor.apply()
 
 
-            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                // We are in portrait orientation
+             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+             {
+                 // We are in portrait orientation
                 activity!!.supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_container, animalWindowsFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-            else{
+                     .replace(R.id.main_container, animalWindowsFragment())
+                     .addToBackStack(null)
+                     .commit()
+             }
+             else
+             {
                 // We are in landscape orientation
                 activity!!.supportFragmentManager.beginTransaction()
                     .replace(R.id.main_container,animalWindowsFragment())
                     .addToBackStack(null)
                     .commit()
             }
-
         }
+
         return view
     }
-
-
 
 }
 
